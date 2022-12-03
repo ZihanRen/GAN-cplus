@@ -32,9 +32,3 @@ img_fake = img_prc(img_fake)
 plt.imshow(img_fake[0,0,0,::],cmap='gray')
 # %% Serializing your script module to a file
 output.save("gen-1.pt")
-
-
-
-
-
-# %%
