@@ -23,6 +23,7 @@
 			"/home/topaz/repo/libtorch/share/cmake/Caffe2/Caffe2Targets.cmake",
 			"/home/topaz/repo/libtorch/share/cmake/Caffe2/Caffe2Config.cmake",
 			"/home/topaz/repo/libtorch/share/cmake/Torch/TorchConfig.cmake",
+			"/usr/share/cmake-3.25/Modules/FindThreads.cmake",
 			"/home/topaz/repo/libtorch/share/cmake/Caffe2/public/threads.cmake"
 		],
 		"nodes" : 
@@ -33,78 +34,88 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 15,
+				"line" : 22,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 17,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 25,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 9,
+				"line" : 15,
 				"parent" : 0
 			},
 			{
 				"file" : 3,
-				"parent" : 3
+				"parent" : 4
 			},
 			{
 				"command" : 4,
 				"file" : 3,
 				"line" : 68,
-				"parent" : 4
+				"parent" : 5
 			},
 			{
 				"file" : 2,
-				"parent" : 5
+				"parent" : 6
 			},
 			{
 				"command" : 3,
 				"file" : 2,
-				"line" : 120,
-				"parent" : 6
+				"line" : 116,
+				"parent" : 7
 			},
 			{
 				"file" : 1,
-				"parent" : 7
+				"parent" : 8
 			},
 			{
 				"command" : 2,
 				"file" : 1,
-				"line" : 72,
-				"parent" : 8
+				"line" : 71,
+				"parent" : 9
 			},
 			{
 				"command" : 3,
 				"file" : 2,
 				"line" : 17,
-				"parent" : 6
+				"parent" : 7
+			},
+			{
+				"file" : 5,
+				"parent" : 11
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 1,
+				"parent" : 12
 			},
 			{
 				"file" : 4,
-				"parent" : 10
+				"parent" : 13
 			},
 			{
 				"command" : 5,
 				"file" : 4,
-				"line" : 26,
-				"parent" : 11
+				"line" : 240,
+				"parent" : 14
 			},
 			{
 				"command" : 2,
 				"file" : 1,
-				"line" : 90,
-				"parent" : 8
-			},
-			{
-				"command" : 5,
-				"file" : 0,
-				"line" : 21,
-				"parent" : 0
+				"line" : 89,
+				"parent" : 9
 			}
 		]
 	},
@@ -114,33 +125,14 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -D_GLIBCXX_USE_CXX11_ABI=0 -g"
+					"fragment" : " -D_GLIBCXX_USE_CXX11_ABI=1 -g   -std=c++11"
 				},
 				{
 					"backtrace" : 2,
-					"fragment" : "-D_GLIBCXX_USE_CXX11_ABI=0"
+					"fragment" : "-D_GLIBCXX_USE_CXX11_ABI=1"
 				},
 				{
 					"fragment" : "-std=gnu++14"
-				}
-			],
-			"defines" : 
-			[
-				{
-					"backtrace" : 2,
-					"define" : "USE_C10D_GLOO"
-				},
-				{
-					"backtrace" : 2,
-					"define" : "USE_DISTRIBUTED"
-				},
-				{
-					"backtrace" : 2,
-					"define" : "USE_RPC"
-				},
-				{
-					"backtrace" : 2,
-					"define" : "USE_TENSORPIPE"
 				}
 			],
 			"includes" : 
@@ -154,6 +146,11 @@
 					"backtrace" : 2,
 					"isSystem" : true,
 					"path" : "/home/topaz/repo/libtorch/include/torch/csrc/api/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "/usr/local/include/opencv4"
 				}
 			],
 			"language" : "CXX",
@@ -161,7 +158,7 @@
 			{
 				"backtraces" : 
 				[
-					14
+					3
 				],
 				"standard" : "14"
 			},
@@ -177,7 +174,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-D_GLIBCXX_USE_CXX11_ABI=0 -g",
+				"fragment" : "-D_GLIBCXX_USE_CXX11_ABI=1 -g",
 				"role" : "flags"
 			},
 			{
@@ -185,7 +182,7 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/home/topaz/repo/libtorch/lib",
+				"fragment" : "-Wl,-rpath,/home/topaz/repo/libtorch/lib:/usr/local/lib",
 				"role" : "libraries"
 			},
 			{
@@ -199,28 +196,98 @@
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 2,
-				"fragment" : "/home/topaz/repo/libtorch/lib/libkineto.a",
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_gapi.so.4.6.0",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 9,
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_highgui.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_ml.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_objdetect.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_photo.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_stitching.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_video.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_videoio.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
 				"fragment" : "-Wl,--no-as-needed,\"/home/topaz/repo/libtorch/lib/libtorch_cpu.so\" -Wl,--as-needed",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 9,
+				"backtrace" : 10,
 				"fragment" : "/home/topaz/repo/libtorch/lib/libc10.so",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 12,
+				"backtrace" : 15,
 				"fragment" : "-lpthread",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 13,
+				"backtrace" : 16,
 				"fragment" : "-Wl,--no-as-needed,\"/home/topaz/repo/libtorch/lib/libtorch.so\" -Wl,--as-needed",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_imgcodecs.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_dnn.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_calib3d.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_features2d.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_flann.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_imgproc.so.4.6.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libopencv_core.so.4.6.0",
 				"role" : "libraries"
 			}
 		],

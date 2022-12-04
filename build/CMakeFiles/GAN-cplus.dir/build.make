@@ -94,8 +94,22 @@ GAN-cplus: CMakeFiles/GAN-cplus.dir/main.cpp.o
 GAN-cplus: CMakeFiles/GAN-cplus.dir/build.make
 GAN-cplus: /home/topaz/repo/libtorch/lib/libtorch.so
 GAN-cplus: /home/topaz/repo/libtorch/lib/libc10.so
-GAN-cplus: /home/topaz/repo/libtorch/lib/libkineto.a
+GAN-cplus: /usr/local/lib/libopencv_gapi.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_highgui.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_ml.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_objdetect.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_photo.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_stitching.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_video.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_videoio.so.4.6.0
 GAN-cplus: /home/topaz/repo/libtorch/lib/libc10.so
+GAN-cplus: /usr/local/lib/libopencv_imgcodecs.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_dnn.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_calib3d.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_features2d.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_flann.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_imgproc.so.4.6.0
+GAN-cplus: /usr/local/lib/libopencv_core.so.4.6.0
 GAN-cplus: CMakeFiles/GAN-cplus.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/topaz/repo/GAN-cplus/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable GAN-cplus"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/GAN-cplus.dir/link.txt --verbose=$(VERBOSE)
