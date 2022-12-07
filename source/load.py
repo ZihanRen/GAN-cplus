@@ -2,6 +2,7 @@
 from model import Generator
 import torch
 gen = Generator(embed_size=6)
+torch.manual_seed(7)
 gen.load_state_dict(torch.load("cgan0620.pth",map_location=torch.device('cpu')))
 gen.eval()
 # %% forward example
@@ -22,6 +23,16 @@ img_fake = img_prc(img_fake)
 plt.imshow(img_fake[0,0,0,::],cmap='gray')
 
 
+#%% validation
+torch.manual_seed(7)
+z = torch.randn(4,100)
+f = torch.ones(4,1)*0.2
+img_fake = gen(z,f)
+
+img_fake_sample = img_fake[0,0,0,::]
+norm_img_fake = (img_fake_sample - img_fake_sample.min()) / (img_fake_sample.max()-img_fake_sample.min())
+
+
 # %% Convert to Torch Script
 output = torch.jit.trace(gen,input_gen)
 
@@ -32,3 +43,4 @@ img_fake = img_prc(img_fake)
 plt.imshow(img_fake[0,0,0,::],cmap='gray')
 # %% Serializing your script module to a file
 output.save("gen-1.pt")
+

@@ -10,33 +10,38 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-cv::Mat TensorToCVMat(torch::Tensor tensor)
-{
-    std::cout << "converting tensor to cvmat\n";
-    tensor = tensor.mul(255).clamp(0, 255).to(torch::kU8);
-    tensor = tensor.to(torch::kCPU);
-    int64_t height = tensor.size(0);
-    int64_t width = tensor.size(1);
-    cv::Mat mat(width, height, CV_8UC3);
-    std::memcpy((void *)mat.data, tensor.data_ptr(), sizeof(torch::kU8) * tensor.numel());
-    return mat.clone();
+
+// print out tensor for debug
+void print_t(torch::Tensor input){
+    float* ptr = (float*)input.data_ptr();
+    std::cout << "\nBegin Printing 3D tensor:" << std::endl;
+    for (int i = 0; i < input.sizes()[0]; ++i)
+      {
+        for (int j = 0; j < input.sizes()[1]; ++j)
+        {
+          for (int k=0; k<input.sizes()[2];++k){
+          std::cout << " " << *ptr++ << " ";
+          }
+          }
+    std::cout << std::endl;
+}
+    std::cout<<"\n";
 }
 
 
 
-// load torch model
+// main func
 int main(int argc, const char* argv[]) {
     if (argc != 2) {
         std::cerr << "usage: example-app <path-to-exported-script-module>\n";
         return -1;
     }
-
-  // initialize some parameters
+  // make sure the model is reproducible
   torch::jit::script::Module module;
   torch::manual_seed(7);
 
   try {
-    // Deserialize the ScriptModule from a file using torch::jit::load().
+    // load the model
     module = torch::jit::load(argv[1]);
     std::cout<< "ScriptModule loaded sucessfully" << std::endl;
   }
@@ -46,8 +51,6 @@ int main(int argc, const char* argv[]) {
   }
 
   // create input for module - torch jit IValue
-  // if you want to have tensor operation, you need to convert torch::jit 
-  // into torch::tensor
   std::vector<torch::jit::IValue> input_gen;
   input_gen.push_back(torch::randn({4,100}));
   input_gen.push_back(torch::ones({4,1})*0.2);
@@ -58,23 +61,46 @@ int main(int argc, const char* argv[]) {
   int thin_sec_idx {0};
   int sample_idx_z {1};
 
-  torch::Tensor img_fake_reshape = img_fake.select(0,sample_idx).select(sample_idx_z,0);
+  // slice the iamge
+  torch::Tensor img_fake_reshape = img_fake.index(
+    {sample_idx,torch::indexing::Slice(),thin_sec_idx,torch::indexing::Slice() ,torch::indexing::Slice() }
+    );
   std::cout << "After reshape, fake image size is " << img_fake_reshape.sizes() << std::endl;
 
   // feed tensor into opencv format and display
-  img_fake_reshape = img_fake_reshape.detach().permute({1,2,0});
-  img_fake_reshape = img_fake_reshape.mul(255).clamp(0,255).to(torch::kU8);
-  img_fake_reshape = img_fake_reshape.to(torch::kCPU);
-  int height,width;
-  height = img_fake_reshape.size(0);
-  width = img_fake_reshape.size(1);
-  cv::Mat imgbin(cv::Size(width,height), CV_16U, img_fake_reshape.data_ptr());
-  std::cout << "The size of image is: " << imgbin.size()<< std::endl;
+  img_fake_reshape = img_fake_reshape.to(torch::kCPU).to(torch::kFloat32).detach();
+  img_fake_reshape = img_fake_reshape.permute({1,2,0}).contiguous();
+  // normalize image
+  auto max_img = torch::max(img_fake_reshape);
+  auto min_img = torch::min(img_fake_reshape);
+  torch::Tensor norm_img = (img_fake_reshape - min_img) / (max_img-min_img);
+  norm_img = norm_img.mul(255.0).clamp(0,255);
 
-  cv::imshow("Display window",imgbin);
+  // define image parameter
+  int img_type = CV_32FC1;
+  int64_t height,width;
+  height = norm_img.size(0);
+  width = norm_img.size(1);
+  cv::Mat imgbin;
 
-  // cv::imwrite("genimg.png",imgbin);
-  // cv::imwrite("genimg.png",imgbin);
+  try{
+    imgbin = cv::Mat(cv::Size(width, height), img_type, norm_img.data_ptr<float>());
+    std::cout << "The size of image is: " << imgbin.size()<< std::endl;}
+
+    catch (const c10::Error& e) {
+    std::cerr << "error convert to mat model\n";
+    return -1;
+  }
+
+  // convert to binary
+  cv::Mat binary_image;
+  cv::threshold(imgbin,binary_image,105,255,cv::THRESH_BINARY);
+
+  // Display image
+  cv::namedWindow("Display window",cv::WINDOW_AUTOSIZE);
+  cv::imshow("Display window",binary_image);
+  cv::waitKey(0);
+  // cv::imwrite("imggen.png",binary_image);
 
 
   
