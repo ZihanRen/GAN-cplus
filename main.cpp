@@ -28,7 +28,26 @@ void print_t(torch::Tensor input){
     std::cout<<"\n";
 }
 
+// tensor to opencv mat
+cv::Mat TensorToMat(torch::Tensor tensor){
+  int img_type = CV_32FC1;
+  int64_t height,width;
+  height = tensor.size(0);
+  width = tensor.size(1);
+  cv::Mat image;
 
+  try{
+    image = cv::Mat(cv::Size(width, height), img_type, tensor.data_ptr<float>());
+    std::cout << "The size of image is: " << image.size()<< std::endl;}
+    catch (const c10::Error& e) {
+    std::cerr << "error convert to mat model\n";
+  }
+
+  // convert to binary
+  cv::Mat binary_image;
+  cv::threshold(image,binary_image,105,255,cv::THRESH_BINARY);
+  return binary_image;
+}
 
 // main func
 int main(int argc, const char* argv[]) {
@@ -76,25 +95,29 @@ int main(int argc, const char* argv[]) {
   torch::Tensor norm_img = (img_fake_reshape - min_img) / (max_img-min_img);
   norm_img = norm_img.mul(255.0).clamp(0,255);
 
-  // define image parameter
-  int img_type = CV_32FC1;
-  int64_t height,width;
-  height = norm_img.size(0);
-  width = norm_img.size(1);
-  cv::Mat imgbin;
-
-  try{
-    imgbin = cv::Mat(cv::Size(width, height), img_type, norm_img.data_ptr<float>());
-    std::cout << "The size of image is: " << imgbin.size()<< std::endl;}
-
-    catch (const c10::Error& e) {
-    std::cerr << "error convert to mat model\n";
-    return -1;
-  }
-
-  // convert to binary
   cv::Mat binary_image;
-  cv::threshold(imgbin,binary_image,105,255,cv::THRESH_BINARY);
+  binary_image = TensorToMat(norm_img);
+  std::cout << "Size of function output is: " << binary_image.size() << std::endl;
+
+  // define image parameter
+  // int img_type = CV_32FC1;
+  // int64_t height,width;
+  // height = norm_img.size(0);
+  // width = norm_img.size(1);
+  // cv::Mat imgbin;
+
+  // try{
+  //   imgbin = cv::Mat(cv::Size(width, height), img_type, norm_img.data_ptr<float>());
+  //   std::cout << "The size of image is: " << imgbin.size()<< std::endl;}
+
+  //   catch (const c10::Error& e) {
+  //   std::cerr << "error convert to mat model\n";
+  //   return -1;
+  // }
+
+  // // convert to binary
+  // cv::Mat binary_image;
+  // cv::threshold(imgbin,binary_image,105,255,cv::THRESH_BINARY);
 
   // Display image
   cv::namedWindow("Display window",cv::WINDOW_AUTOSIZE);
@@ -102,15 +125,4 @@ int main(int argc, const char* argv[]) {
   cv::waitKey(0);
   // cv::imwrite("imggen.png",binary_image);
 
-
-  
-
-
-
-
-
-
-  // convert torch tensor to opencv mat
-  // img_fake = img_fake.squeeze().detach().permute({1,2,0})
-  
 }
