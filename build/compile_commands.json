@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/topaz/repo/GAN-cplus/build",
-  "command": "/usr/bin/g++  -isystem /home/topaz/repo/libtorch/include -isystem /home/topaz/repo/libtorch/include/torch/csrc/api/include -isystem /usr/local/include/opencv4  -D_GLIBCXX_USE_CXX11_ABI=1 -g   -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=1 -std=gnu++14 -o CMakeFiles/GAN-cplus.dir/main.cpp.o -c /home/topaz/repo/GAN-cplus/main.cpp",
-  "file": "/home/topaz/repo/GAN-cplus/main.cpp"
-}
-]
